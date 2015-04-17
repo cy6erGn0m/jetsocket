@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import rx.Observable
 import rx.Subscription
 import rx.subjects.PublishSubject
+import rx.subjects.ReplaySubject
 import rx.subjects.Subject
 import java.io.InputStream
 import java.nio.ByteBuffer
@@ -22,7 +23,7 @@ public trait Request<Input> {
     val input : Observable<Input>
 }
 
-class RequestImpl<Input>(override val session : Session, override val input : PublishSubject<Input>, volatile var subscription : Subscription? = null) : Request<Input>
+class RequestImpl<Input>(override val session : Session, override val input : Subject<Input, Input>, volatile var subscription : Subscription? = null) : Request<Input>
 class Pipe<Input, Output>(val request : Request<Input>, val output : Observable<Output>)
 
 public abstract class WebSocketWriteOnly<Output>(body : (Observable<Request<kotlin.Any>>) -> Observable<Pipe<kotlin.Any, Output>>) : WebSocket<Any, Output>(javaClass<Any>(), body)
@@ -53,7 +54,7 @@ public abstract class WebSocket<Input, Output>(val inputClass : Class<Input>, va
 
     [OnOpen]
     final fun opened(session : Session) {
-        val eventsSubject = PublishSubject.create<Input>()
+        val eventsSubject = ReplaySubject.create<Input>(1024)
         val request = RequestImpl(session, eventsSubject)
         putRequestToSession(session, request)
 
