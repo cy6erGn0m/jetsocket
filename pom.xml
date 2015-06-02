@@ -25,6 +25,13 @@
         </dependency>
     </dependencies>
 
+    <url>https://github.com/cy6erGn0m/jetsocket</url>
+    <scm>
+        <connection>scm:git:git@github.com:cy6erGn0m/jetsocket.git</connection>
+        <url>https://github.com/cy6erGn0m/jetsocket</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
