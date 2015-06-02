@@ -35,6 +35,33 @@
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.4</version>
+
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                            <goal>test-jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.2</version>
+
+                <configuration>
+                    <allowTimestampedSnapshots>true</allowTimestampedSnapshots>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
     <distributionManagement>
