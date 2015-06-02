@@ -18,7 +18,7 @@ import javax.websocket.*
 public val Session.userProperties : MutableMap<String, Any>
     get() = this.getUserProperties()
 
-public trait Request<Input> {
+public interface Request<Input> {
     val session: Session
     val input : Observable<Input>
 }
@@ -52,7 +52,7 @@ public abstract class WebSocket<Input, Output>(val inputClass : Class<Input>, va
         }
     }
 
-    [OnOpen]
+    @OnOpen
     final fun opened(session : Session) {
         val eventsSubject = ReplaySubject.create<Input>(1024)
         val request = RequestImpl(session, eventsSubject)
@@ -65,12 +65,12 @@ public abstract class WebSocket<Input, Output>(val inputClass : Class<Input>, va
         }
     }
 
-    [OnClose]
+    @OnClose
     final fun closed(session : Session) {
         closeAndUnSubscribe(session)
     }
 
-    [OnMessage]
+    @OnMessage
     final fun received(session : Session, message : String) {
         val request = getRequestFromSession(session)
 
@@ -85,7 +85,7 @@ public abstract class WebSocket<Input, Output>(val inputClass : Class<Input>, va
         }
     }
 
-    [OnMessage]
+    @OnMessage
     final fun received(session : Session, input : InputStream) {
         val request = getRequestFromSession(session)
 
@@ -101,7 +101,7 @@ public abstract class WebSocket<Input, Output>(val inputClass : Class<Input>, va
     }
 
     val emptyBB = ByteBuffer.allocate(0)
-    [OnMessage]
+    @OnMessage
     final fun ping(session : Session, ping : PongMessage) {
         println("Ping received");
         session.getBasicRemote().sendPong(emptyBB)
@@ -120,7 +120,7 @@ public abstract class WebSocket<Input, Output>(val inputClass : Class<Input>, va
         }
     }
 
-    [suppress("UNCHECKED_CAST")]
+    @suppress("UNCHECKED_CAST")
     private fun getRequestFromSession(session: Session) = session.userProperties["r"] as RequestImpl<Input>?
     private fun putRequestToSession(session : Session, request : Request<*>) {
         session.userProperties["r"] = request

@@ -13,7 +13,7 @@
     </modules>
 
     <properties>
-        <kotlin.version>0.11.91.1</kotlin.version>
+        <kotlin.version>0.1-SNAPSHOT</kotlin.version>
     </properties>
 
     <dependencies>
@@ -29,4 +29,11 @@
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>bintray</id>
+            <url>https://api.bintray.com/maven/cy6ergn0m/maven/jetsocket</url>
+        </repository>
+    </distributionManagement>
 </project>
